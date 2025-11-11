@@ -286,3 +286,4 @@ Actualmente estudiando DAW y construyendo proyectos que combinan tecnología con
 Hecho con 💚 y 🐾 en Santiago de Compostela
 
 </div>
+
