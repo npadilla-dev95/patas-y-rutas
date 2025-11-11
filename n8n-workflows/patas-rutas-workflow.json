@@ -1,0 +1,399 @@
+{
+  "name": "PatasyRutas - Servicio Premium",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "patasyrutas-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b4fe22e7-9436-4440-bc06-b58b4fa44f66",
+      "name": "Webhook - Formulario Web",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        208
+      ],
+      "webhookId": "patasyrutas-form"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "nombre",
+              "value": "={{ $json.body.nombre }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "name": "destino",
+              "value": "={{ $json.body.destino }}"
+            },
+            {
+              "name": "fechaInicio",
+              "value": "={{ $json.body.fechaInicio }}"
+            },
+            {
+              "name": "fechaFin",
+              "value": "={{ $json.body.fechaFin }}"
+            },
+            {
+              "name": "tipoMascota",
+              "value": "={{ $json.body.tipoMascota }}"
+            },
+            {
+              "name": "tamanoMascota",
+              "value": "={{ $json.body.tamanoMascota }}"
+            },
+            {
+              "name": "presupuesto",
+              "value": "={{ $json.body.presupuesto }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "76445266-57d7-41ca-8bba-6f6ac63e5a8a",
+      "name": "Procesar Datos Formulario",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/forecast",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "queryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.destino }}"
+            },
+            {
+              "name": "appid",
+              "value": "TU_OPENWEATHER_API_KEY_AQUI"
+            },
+            {
+              "name": "units",
+              "value": "metric"
+            },
+            {
+              "name": "lang",
+              "value": "es"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "43f9328a-fbf8-4723-b072-a078672f121c",
+      "name": "OpenWeather API - Clima Real",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.geoapify.com/v2/places",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "categories",
+              "value": "accommodation"
+            },
+            {
+              "name": "filter",
+              "value": "circle:0,0,5000"
+            },
+            {
+              "name": "bias",
+              "value": "proximity:0,0"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "apiKey",
+              "value": "TU_GEOAPIFY_API_KEY_AQUI"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5c9ad267-0160-4dc6-b30d-9b8d28da3c35",
+      "name": "Geoapify - Hoteles Pet-Friendly",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        0,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.geoapify.com/v2/places",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "categories",
+              "value": "catering.restaurant"
+            },
+            {
+              "name": "filter",
+              "value": "circle:0,0,5000"
+            },
+            {
+              "name": "bias",
+              "value": "proximity:0,0"
+            },
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "apiKey",
+              "value": "TU_GEOAPIFY_API_KEY_AQUI"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "76487de0-11d0-4f84-9138-caf69b068495",
+      "name": "Geoapify - Restaurantes Pet-Friendly",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "5d5c28eb-24f7-46e4-93f5-6e42133a6fca",
+      "name": "Combinar Datos de APIs",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        224,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "TU_ANTHROPIC_API_KEY_AQUI"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-20250514\",\n  \"max_tokens\": 4096,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Eres un experto en viajes pet-friendly de España. Genera una guía completa en HTML para enviar por email.\\n\\n=== DATOS DEL CLIENTE (USA ESTOS DATOS REALES) ===\\nNombre: {{ $('Procesar Datos Formulario').item.json.body.nombre }}\\nEmail: {{ $('Procesar Datos Formulario').item.json.body.email }}\\nDestino: {{ $('Procesar Datos Formulario').item.json.body.destino }}\\nFecha inicio: {{ $('Procesar Datos Formulario').item.json.body.fecha_inicio }}\\nFecha fin: {{ $('Procesar Datos Formulario').item.json.body.fecha_fin }}\\nTipo mascota: {{ $('Procesar Datos Formulario').item.json.body.tipo_mascota }}\\nNombre mascota: {{ $('Procesar Datos Formulario').item.json.body.nombre_mascota }}\\nTamaño mascota: {{ $('Procesar Datos Formulario').item.json.body.tamano_mascota }}\\nInfo mascota: {{ $('Procesar Datos Formulario').item.json.body.info_mascota }}\\nPreferencias: {{ $('Procesar Datos Formulario').item.json.body.preferencias }}\\n\\n=== DATOS DEL CLIMA (USA ESTOS DATOS REALES) ===\\nCiudad: {{ $('Combinar Datos de APIs').item.json.city.name }}\\nTemperatura actual: {{ $('Combinar Datos de APIs').item.json.main.temp }}°C\\nSensación térmica: {{ $('Combinar Datos de APIs').item.json.main.feels_like }}°C\\nClima: {{ $('Combinar Datos de APIs').item.json.weather[0].description }}\\nHumedad: {{ $('Combinar Datos de APIs').item.json.main.humidity }}%\\n\\n=== TU TAREA ===\\nGenera un email en HTML con:\\n\\n1. **Saludo personalizado** usando el nombre real del cliente y su mascota\\n\\n2. **Sección de clima** con:\\n   - Temperatura y clima actual\\n   - Qué ropa llevar según el clima\\n   - Consejos para la mascota según la temperatura\\n\\n3. **Hoteles Pet-Friendly en {{ $('Procesar Datos Formulario').item.json.body.destino }}** (como las APIs de hoteles fallaron, INVENTA 4-5 hoteles reales y conocidos de {{ $('Procesar Datos Formulario').item.json.body.destino }} que sepas que admiten mascotas):\\n   - Nombre del hotel\\n   - Dirección aproximada\\n   - Por qué es bueno para mascotas\\n   - Precio aproximado\\n\\n4. **Restaurantes Pet-Friendly** (INVENTA 4-5 restaurantes con terrazas reales de {{ $('Procesar Datos Formulario').item.json.body.destino }}):\\n   - Nombre\\n   - Tipo de comida\\n   - Por qué admite mascotas (terraza, jardín, etc.)\\n\\n5. **Actividades y lugares para visitar con {{ $('Procesar Datos Formulario').item.json.body.nombre_mascota }}** según las preferencias: {{ $('Procesar Datos Formulario').item.json.body.preferencias }}\\n\\n6. **Consejos específicos** para viajar con un {{ $('Procesar Datos Formulario').item.json.body.tipo_mascota }} de tamaño {{ $('Procesar Datos Formulario').item.json.body.tamano_mascota }}\\n\\n7. **Despedida cálida** deseándole buen viaje\\n\\n=== ESTILO HTML ===\\n```html\\n<!DOCTYPE html>\\n<html>\\n<head>\\n<meta charset=\\\"UTF-8\\\">\\n<style>\\n  body { font-family: Arial, sans-serif; background: #f9fafb; margin: 0; padding: 20px; }\\n  .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }\\n  .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px 20px; text-align: center; }\\n  .header h1 { margin: 0; font-size: 24px; }\\n  .content { padding: 30px 20px; }\\n  .section { margin-bottom: 30px; }\\n  .section h2 { color: #10b981; font-size: 20px; margin-bottom: 15px; border-bottom: 2px solid #10b981; padding-bottom: 8px; }\\n  .item { background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #10b981; }\\n  .item h3 { color: #065f46; margin: 0 0 8px 0; font-size: 16px; }\\n  .item p { color: #374151; margin: 5px 0; font-size: 14px; line-height: 1.6; }\\n  .weather-box { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 20px; border-radius: 8px; text-align: center; }\\n  .footer { background: #f3f4f6; padding: 20px; text-align: center; color: #6b7280; font-size: 14px; }\\n</style>\\n</head>\\n<body>\\n<!-- TU CONTENIDO AQUÍ -->\\n</body>\\n</html>\\n```\\n\\n**IMPORTANTE:** \\n- Responde SOLO con el HTML completo\\n- NO uses placeholders como [NOMBRE] - usa los datos reales que te di arriba\\n- NO pongas ```html ni markdown - solo el HTML puro\\n- Sé específico con los nombres reales de hoteles y restaurantes de {{ $('Procesar Datos Formulario').item.json.body.destino }}\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "095ebe21-8923-42a5-8125-476f47fc0ab7",
+      "name": "Claude API - Generar Itinerario",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = items[0].json;\nconst emailContent = response.content[0].text;\n\nreturn {\n  json: {\n    emailHtml: emailContent\n  }\n};"
+      },
+      "id": "2493e94b-4fd2-45af-98b4-a2bdd0916f1b",
+      "name": "Extraer Respuesta Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, message: '¡Tu itinerario personalizado está en camino! Revisa tu email en los próximos minutos.', email: $('Procesar Datos Formulario').item.json.email } }}",
+        "options": {}
+      },
+      "id": "7268797d-022f-4664-8b3a-315d2dc3ecb8",
+      "name": "Respuesta al Formulario",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook - Formulario Web').item.json.body.email }}",
+        "subject": "Tu Guía Personalizada - Patas y Rutas 🐾",
+        "message": "={{ $json.emailHtml }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        208
+      ],
+      "id": "dbaedfb5-fb79-43db-94c5-58d1e47f165d",
+      "name": "Send a message",
+      "webhookId": "NOTA: Configura tus credenciales de Gmail OAuth2 en n8n",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CONFIGURA_EN_N8N",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Formulario Web": {
+      "main": [
+        [
+          {
+            "node": "Procesar Datos Formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Procesar Datos Formulario": {
+      "main": [
+        [
+          {
+            "node": "OpenWeather API - Clima Real",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Geoapify - Hoteles Pet-Friendly",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Geoapify - Restaurantes Pet-Friendly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenWeather API - Clima Real": {
+      "main": [
+        [
+          {
+            "node": "Combinar Datos de APIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Geoapify - Hoteles Pet-Friendly": {
+      "main": [
+        [
+          {
+            "node": "Combinar Datos de APIs",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combinar Datos de APIs": {
+      "main": [
+        [
+          {
+            "node": "Claude API - Generar Itinerario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude API - Generar Itinerario": {
+      "main": [
+        [
+          {
+            "node": "Extraer Respuesta Claude",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer Respuesta Claude": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Respuesta al Formulario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "CLEAN_VERSION_FOR_GITHUB",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "REEMPLAZA_CON_TU_INSTANCIA_DE_N8N"
+  },
+  "id": "patas-y-rutas-workflow",
+  "tags": []
+}
