@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Patas & Rutas — Ruta pet-friendly personalizada</title>
+  <meta name="description" content="Rutas y guías pet-friendly personalizadas con IA — itinerarios, alojamientos, playas y consejos para viajar con tu perro.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass { background: rgba(255,255,255,0.7); backdrop-filter: blur(6px); }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-green-50 to-white text-gray-800 antialiased">
+  <header class="max-w-5xl mx-auto p-6">
+    <nav class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center text-white font-bold">🐾</div>
+        <div class="font-bold text-lg">Patas &amp; Rutas</div>
+      </div>
+      <div class="hidden md:flex items-center gap-4">
+        <a href="#planes" class="text-sm">Planes</a>
+        <a href="#alojamientos" class="text-sm">Alojamientos</a>
+        <a href="#contacto" class="text-sm">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="max-w-4xl mx-auto text-center px-6 py-12">
+    <h1 class="text-3xl md:text-4xl font-extrabold">💚 Tu ruta pet-friendly personalizada con IA</h1>
+    <p class="mt-4 text-gray-700">Viajar con tu perro nunca fue tan fácil 🐾 — Dinos desde dónde sales, a dónde quieres ir, y nuestra inteligencia artificial te creará una guía completa con rutas, alojamientos y lugares donde tu peludo será bienvenido.</p>
+    <p class="mt-2 text-sm text-gray-600">Perfecto para escapadas en coche, furgoneta o autocaravana 🚐🌄</p>
+
+    <div class="mt-8">
+      <a href="patas-rutas-form.html" target="_blank" class="inline-block px-6 py-3 bg-green-500 text-white rounded-full font-semibold shadow-lg hover:bg-green-600">👉 Crea tu ruta ahora</a>
+    </div>
+
+    <p class="mt-3 text-xs text-gray-500">Recibe tu guía en PDF en menos de 10 min.</p>
+  </section>
+
+  <main class="max-w-5xl mx-auto px-6 pb-16">
+
+    <!-- Cómo funciona -->
+    <section class="mt-8 bg-white rounded-2xl p-6 glass shadow">
+      <h2 class="text-2xl font-bold">🚗 ¿Cómo funciona?</h2>
+      <ol class="mt-4 space-y-3 text-gray-700">
+        <li>1️⃣ <strong>Rellena un formulario simple</strong> — Cuéntanos origen, destino, duración y algunos detalles de tu viaje.</li>
+        <li>2️⃣ <strong>La IA genera tu guía personalizada</strong> — Itinerario adaptado con campings, playas, restaurantes y consejos.</li>
+        <li>3️⃣ <strong>Recibe tu PDF en el correo en minutos</strong> — Listo para imprimir o abrir desde el móvil.</li>
+      </ol>
+    </section>
+
+    <!-- Ejemplo de ruta -->
+    <section id="ejemplo" class="mt-8">
+      <h3 class="text-xl font-bold">🐾 Ejemplo de ruta</h3>
+      <div class="mt-4 bg-white rounded-xl p-5 shadow">
+        <blockquote class="italic text-gray-700">Ruta del Atlántico Salvaje (Galicia – Asturias)</blockquote>
+
+        <div class="mt-3 space-y-2 text-gray-800">
+          <p><strong>🚐 Día 1:</strong> A Coruña → Laxe — Parada en la Playa Canina de A Fonte.</p>
+          <p><strong>🏕️ Alojamiento:</strong> Camping Sisargas (pet-friendly)</p>
+          <p><strong>🚐 Día 2:</strong> Laxe → Cudillero — Mirador de Ézaro, playa dog-friendly y pernocta con vistas al mar.</p>
+
+          <p class="mt-2"><strong>🍽️ Recomendaciones:</strong></p>
+          <ul class="list-disc list-inside text-gray-700">
+            <li>O Curro da Parra (Santiago)</li>
+            <li>Café Petiscos (Muxía)</li>
+          </ul>
+
+          <p class="mt-2 text-sm text-gray-600">💡 Consejo: lleva toalla, botiquín canino y revisa la app “PlayasDogFriendly”.</p>
+          <p class="mt-1 font-semibold">🌄 Disfruta de cada kilómetro con tu compañero peludo 🐶💚</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: Buscar alojamientos -->
+    <section id="alojamientos" class="mt-12 bg-white rounded-2xl p-6 shadow">
+      <h3 class="text-2xl font-bold text-center mb-4">🏕️ Buscar alojamientos pet-friendly</h3>
+      <p class="text-center text-gray-700 max-w-2xl mx-auto">
+        Consulta alojamientos que admiten mascotas según tu destino y fechas. Perfecto si quieres comparar rutas o elegir según la comodidad de tu compañero peludo 🐶✨
+      </p>
+
+      <div class="mt-6 flex flex-col md:flex-row items-center justify-center gap-4">
+        <input id="destino" type="text" placeholder="Introduce tu destino (ej. Galicia, Asturias...)" class="border rounded-full px-4 py-2 w-full md:w-1/2 focus:ring-2 focus:ring-green-400 outline-none">
+        <button id="buscar" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-semibold">🔍 Buscar</button>
+      </div>
+
+      <div id="enlaces" class="mt-6 text-center space-y-2 hidden">
+        <p class="text-sm text-gray-600">Resultados rápidos en tus plataformas favoritas:</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a id="link-booking" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700">🐾 Ver en Booking</a>
+          <a id="link-airbnb" target="_blank" class="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600">🏡 Ver en Airbnb</a>
+          <a id="link-campings" target="_blank" class="px-4 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600">🏕️ Ver en Campings.com</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Script buscador -->
+    <script>
+      const buscarBtn = document.getElementById("buscar");
+      const destinoInput = document.getElementById("destino");
+      const enlacesDiv = document.getElementById("enlaces");
+      const linkBooking = document.getElementById("link-booking");
+      const linkAirbnb = document.getElementById("link-airbnb");
+      const linkCampings = document.getElementById("link-campings");
+
+      buscarBtn.addEventListener("click", () => {
+        const destino = encodeURIComponent(destinoInput.value.trim());
+        if (!destino) return alert("Por favor, introduce un destino 🌍");
+
+        linkBooking.href = `https://www.booking.com/searchresults.html?ss=${dest

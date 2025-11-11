@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Crea tu ruta pet-friendly personalizada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background-color: #d5e8dc;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 50px 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #2d3748;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #2d3748;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #68d391;
+            box-shadow: 0 0 0 3px rgba(104, 211, 145, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232d3748' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background-color: #c53030;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #68d391;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #4a5568;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .loading-subtext {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .message {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #c6f6d5;
+            border: 2px solid #68d391;
+            color: #22543d;
+            display: block;
+        }
+
+        .message.error {
+            background-color: #fed7d7;
+            border: 2px solid #fc8181;
+            color: #742a2a;
+            display: block;
+        }
+
+        .message strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .thank-you {
+            text-align: center;
+            color: #4a5568;
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .thank-you-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .thank-you p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .email-link {
+            color: #3182ce;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .info-pills {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 Crea tu ruta pet-friendly personalizada</h1>
+            
+            <p class="subtitle">
+                Viajar con tu perro nunca fue tan fácil 🐶💚
+            </p>
+            
+            <p class="subtitle">
+                Cuéntanos un poco sobre tu próximo viaje y nuestra IA creará una guía completa con rutas, 
+                alojamientos y lugares donde tu peludo será bienvenido.
+            </p>
+
+            <div class="info-pills">
+                <div class="pill">⏱️ Tardarás menos de 2 minutos.</div>
+                <div class="pill">📧 Recibirás tu guía en PDF en tu correo en menos de 10 minutos.</div>
+            </div>
+        </div>
+
+        <form id="patasyrutasForm">
+            <!-- DATOS PERSONALES -->
+            <div class="section-title">DATOS PERSONALES</div>
+
+            <div class="form-group">
+                <label for="nombre">¿Cómo te llamas? <span class="required">*</span></label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Tu correo electrónico (para enviarte la guía) <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+            </div>
+
+            <!-- DATOS DEL VIAJE -->
+            <div class="section-title">DATOS DEL VIAJE</div>
+
+            <div class="form-group">
+                <label for="destino">¿A dónde vas? <span class="required">*</span></label>
+                <input type="text" id="destino" name="destino" placeholder="Ciudad o región" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_inicio">¿Cuándo empiezas tu viaje? <span class="required">*</span></label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha_fin">¿Cuándo termina? <span class="required">*</span></label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required>
+            </div>
+
+            <!-- SOBRE TU PELUDO -->
+            <div class="section-title">SOBRE TU PELUDO</div>
+
+            <div class="form-group">
+                <label for="nombre_mascota">¿Cómo se llama?</label>
+                <input type="text" id="nombre_mascota" name="nombre_mascota" placeholder="Nombre de tu mascota">
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_mascota">¿Qué tipo de mascota es? <span class="required">*</span></label>
+                <select id="tipo_mascota" name="tipo_mascota" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="perro">🐕 Perro</option>
+                    <option value="gato">🐱 Gato</option>
+                    <option value="otro">🐾 Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tamano_mascota">¿De qué tamaño es?</label>
+                <select id="tamano_mascota" name="tamano_mascota">
+                    <option value="">Selecciona una opción</option>
+                    <option value="pequeño">Pequeño (hasta 10kg)</option>
+                    <option value="mediano">Mediano (10-25kg)</option>
+                    <option value="grande">Grande (más de 25kg)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="info_mascota">¿Hay algo importante que debamos saber? (carácter, alergias, etc.)</label>
+                <textarea id="info_mascota" name="info_mascota" placeholder="Ej: Es muy sociable, le encanta correr..."></textarea>
+            </div>
+
+            <!-- PREFERENCIAS -->
+            <div class="section-title">EXTRA O PREFERENCIAS</div>
+
+            <div class="form-group">
+                <label for="preferencias">¿Alguna preferencia adicional para tu viaje?</label>
+                <textarea id="preferencias" name="preferencias" placeholder="Ej: Prefiero zonas tranquilas, me gusta la naturaleza, busco playas dog-friendly..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span>➜</span>
+                <span>Generar mi guía personalizada</span>
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p class="loading-text">Generando tu guía personalizada...</p>
+            <p class="loading-subtext">Esto puede tardar unos segundos ⏳</p>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="thank-you">
+            <p class="thank-you-title">🐶 ¡Gracias por crear tu ruta con Patas & Rutas!</p>
+            <p>En unos minutos recibirás tu guía personalizada en tu correo 💌</p>
+            <p>Si no la ves, revisa tu carpeta de spam o escríbenos a <a href="mailto:hola@patasyrutas.com" class="email-link">hola@patasyrutas.com</a></p>
+            <p style="margin-top: 15px;">🌍 Mientras tanto, síguenos en Instagram <strong>@PatasYRutas</strong> para ver ideas de rutas y lugares pet-friendly.</p>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ CONFIGURACIÓN ACTUALIZADA - URL DE RAILWAY
+        const WEBHOOK_URL = 'https://n8n-production-8878.up.railway.app/webhook/patasyrutas-webhook';
+
+        // Establecer fecha mínima como hoy
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('fecha_inicio').min = today;
+        document.getElementById('fecha_fin').min = today;
+
+        // Validar que fecha fin sea posterior a fecha inicio
+        document.getElementById('fecha_inicio').addEventListener('change', function() {
+            document.getElementById('fecha_fin').min = this.value;
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('patasyrutasForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Obtener datos del formulario
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                destino: document.getElementById('destino').value,
+                fecha_inicio: document.getElementById('fecha_inicio').value,
+                fecha_fin: document.getElementById('fecha_fin').value,
+                nombre_mascota: document.getElementById('nombre_mascota').value,
+                tipo_mascota: document.getElementById('tipo_mascota').value,
+                tamano_mascota: document.getElementById('tamano_mascota').value,
+                info_mascota: document.getElementById('info_mascota').value,
+                preferencias: document.getElementById('preferencias').value
+            };
+
+            // Mostrar loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('message').style.display = 'none';
+            document.querySelector('.submit-btn').disabled = true;
+
+            try {
+                console.log('Enviando a:', WEBHOOK_URL);
+                console.log('Datos:', formData);
+
+                // Enviar a n8n en Railway
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                console.log('Respuesta:', response.status, response.statusText);
+
+                if (response.ok) {
+                    // Éxito
+                    document.getElementById('loading').classList.remove('active');
+                    const messageEl = document.getElementById('message');
+                    messageEl.className = 'message success';
+                    messageEl.innerHTML = `
+                        <strong>🎉 ¡Perfecto, ${formData.nombre}!</strong>
+                        Tu guía personalizada para viajar con ${formData.nombre_mascota || 'tu peludo'} está siendo generada.<br><br>
+                        La recibirás en <strong>${formData.email}</strong> en menos de 10 minutos. 💌
+                    `;
+                    
+                    // Scroll al mensaje
+                    messageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Limpiar formulario
+                    document.getElementById('patasyrutasForm').reset();
+                } else {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                // Error
+                console.error('Error completo:', error);
+                document.getElementById('loading').classList.remove('active');
+                const messageEl = document.getElementById('message');
+                messageEl.className = 'message error';
+                messageEl.innerHTML = `
+                    <strong>⚠️ Oops!</strong>
+                    Hubo un problema al enviar tu solicitud.<br>
+                    Error: ${error.message}<br>
+                    Por favor, intenta de nuevo o escríbenos a hola@patasyrutas.com
+                `;
+            } finally {
+                document.querySelector('.submit-btn').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
